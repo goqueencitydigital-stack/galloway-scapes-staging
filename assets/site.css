@@ -1298,3 +1298,9 @@ blockquote.own p{margin:0}
 .gal figure:hover img{transform:scale(1.04)}
 @media (min-width:901px){.sv-cards.c5 .hx-need .im{aspect-ratio:16/9}.sv-cards.c5 .hx-need .t{padding:12px 16px 14px}}
 .segs input[type=radio]{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;opacity:0!important;appearance:none;-webkit-appearance:none;border:0!important;background:none!important;box-shadow:none!important}
+/* hero photo: feather the left edge so no seam can flicker during zoom/parallax */
+@media (min-width:901px){
+  .hx-hero .bg{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%);mask-image:linear-gradient(90deg,transparent 0,#000 22%);backface-visibility:hidden;transform:translateZ(0)}
+  .hx-hero .bg::after{inset:-2px}
+  .hx-hero .bg img{backface-visibility:hidden;will-change:transform}
+}
