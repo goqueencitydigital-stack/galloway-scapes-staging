@@ -81,6 +81,25 @@
     stepsEl.forEach(s => io.observe(s));
   });
 
+  // ---------- pinned story (home) ----------
+  $$('[data-tale]').forEach(sec => {
+    const frs = $$('.tale-stage .fr', sec), txs = $$('.tale-text .tx', sec), navs = $$('.tale-nav button', sec);
+    const bar = $('.tale-bar', sec), cnt = $('[data-count]', sec), n = frs.length; let cur = 0;
+    const set = i => { if (i === cur) return; cur = i;
+      frs.forEach((f, j) => f.classList.toggle('on', j === i)); txs.forEach((t, j) => t.classList.toggle('on', j === i));
+      navs.forEach((b, j) => j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current'));
+      if (cnt) cnt.textContent = String(i + 1).padStart(2, '0'); };
+    const span = () => sec.offsetHeight - innerHeight;
+    const onScroll = () => { if (innerWidth < 901) return;
+      const p = Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / span()));
+      bar && bar.style.setProperty('--p', p.toFixed(3));
+      set(Math.min(n - 1, Math.floor(p * n * 0.999))); };
+    addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
+    navs.forEach((b, i) => b.addEventListener('click', () => {
+      const y = sec.getBoundingClientRect().top + scrollY + span() * ((i + 0.5) / n);
+      scrollTo({ top: y, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }));
+  });
+
   // ---------- reels ----------
   $$('.reel').forEach(r => {
     const v = $('video', r), btn = $('.poster', r);
