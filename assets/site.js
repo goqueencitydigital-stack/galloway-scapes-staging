@@ -90,7 +90,7 @@
       navs.forEach((b, j) => j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current'));
       if (cnt) cnt.textContent = String(i + 1).padStart(2, '0'); };
     const span = () => sec.offsetHeight - innerHeight;
-    const onScroll = () => { if (innerWidth < 901) return;
+    const onScroll = () => {
       const p = Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / span()));
       bar && bar.style.setProperty('--p', p.toFixed(3));
       set(Math.min(n - 1, Math.floor(p * n * 0.999))); };
@@ -241,7 +241,7 @@
 ;(function(){var s=document.querySelector('.hc-strip');if(!s)return;var b=s.querySelector('.hc-pause');b&&b.addEventListener('click',function(){var p=s.classList.toggle('paused');b.setAttribute('aria-pressed',p);b.setAttribute('aria-label',p?'Play moving photos':'Pause moving photos');});})();
 /* blog table of contents: highlight the section you're reading */
 (() => {
-  const links = [...document.querySelectorAll('.ps-toc a')]; if (!links.length || !('IntersectionObserver' in window)) return;
+  const links = [...document.querySelectorAll('.ps-toc a, .gd-toc a[href^="#"]')]; if (!links.length || !('IntersectionObserver' in window)) return;
   const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } }), { rootMargin: '-20% 0px -70% 0px' });
   map.forEach((a, id) => { const h = document.getElementById(id); if (h) io.observe(h); });
