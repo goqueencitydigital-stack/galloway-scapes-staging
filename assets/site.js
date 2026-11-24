@@ -239,3 +239,10 @@
   }
 })();
 ;(function(){var s=document.querySelector('.hc-strip');if(!s)return;var b=s.querySelector('.hc-pause');b&&b.addEventListener('click',function(){var p=s.classList.toggle('paused');b.setAttribute('aria-pressed',p);b.setAttribute('aria-label',p?'Play moving photos':'Pause moving photos');});})();
+/* blog table of contents: highlight the section you're reading */
+(() => {
+  const links = [...document.querySelectorAll('.ps-toc a')]; if (!links.length || !('IntersectionObserver' in window)) return;
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } }), { rootMargin: '-20% 0px -70% 0px' });
+  map.forEach((a, id) => { const h = document.getElementById(id); if (h) io.observe(h); });
+})();
