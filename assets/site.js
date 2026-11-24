@@ -86,16 +86,20 @@
   // ---------- estimate form ----------
   const form = $('#est-form');
   const svcSel = $('#f-service');
+  let svcDetail = '', svcDetailKey = '';
   function setService(v, lock = true) {
-    if (!svcSel || !v || ![...svcSel.options].some(o => o.value === v)) return;
-    svcSel.value = v;
+    if (!svcSel || !v) return;
+    const sub = (G.subs || {})[v];
+    const hub = sub ? sub[0] : v;
+    if (![...svcSel.options].some(o => o.value === hub)) return;
+    svcSel.value = hub; svcDetail = sub ? sub[1] : ''; svcDetailKey = sub ? v : '';
     const chip = $('.svc-chip', form);
-    if (chip && lock) { $('[data-svc-label]', chip).textContent = svcSel.options[svcSel.selectedIndex].text; chip.hidden = false; svcSel.hidden = true; }
+    if (chip && lock) { $('[data-svc-label]', chip).textContent = svcDetail || svcSel.options[svcSel.selectedIndex].text; chip.hidden = false; svcSel.hidden = true; }
   }
   if (form) {
     const qs = new URLSearchParams(location.search).get('service');
     setService(qs || form.dataset.defaultService || '');
-    $('[data-svc-change]', form).addEventListener('click', () => { $('.svc-chip', form).hidden = true; svcSel.hidden = false; svcSel.focus(); });
+    $('[data-svc-change]', form).addEventListener('click', () => { svcDetail = ''; svcDetailKey = ''; $('.svc-chip', form).hidden = true; svcSel.hidden = false; svcSel.focus(); });
     const msg = $('.msg', form), btn = $('button[type=submit]', form), born = Date.now();
     let started = false;
     form.addEventListener('focusin', () => { if (!started) { started = true; track('estimate_start', { form_service: svcSel.value || 'none' }); } });
@@ -146,7 +150,7 @@
       e.preventDefault(); msg.className = 'msg'; msg.textContent = '';
       if (!validate()) { const first = $('.f.bad input, .f.bad select', form); first && first.focus(); track('form_error', { form_service: svcSel.value || 'none', reason: 'validation' }); return; }
       const F = form.elements; if (F._honey && F._honey.value) return;
-      const svc = svcSel.value, svcLabel = svcSel.options[svcSel.selectedIndex].text, m = method(), c = F.contact.value.trim();
+      const svc = svcDetailKey || svcSel.value, svcLabel = svcDetail || svcSel.options[svcSel.selectedIndex].text, m = method(), c = F.contact.value.trim();
       const data = { name: F.name.value.trim(), zip: F.zip.value.trim(), method: m, phone: m === 'email' ? '' : c, email: m === 'email' ? c : '', service: svcLabel, service_key: svc, message: F.message.value.trim(), photos, page: location.href.split('?')[0].split('#')[0], env: G.env || 'staging', t: Date.now() - born };
       btn.disabled = true; btn.firstChild.textContent = photos.length ? 'Sending photos… ' : 'Sending… ';
       try {

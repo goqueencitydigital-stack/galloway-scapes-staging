@@ -589,3 +589,20 @@ blockquote.own p{margin:0}
 .pdet p{color:var(--muted);margin:0;max-width:46ch}
 @media (max-width:760px){.pdet{grid-template-columns:1fr}.pdet article.off{margin-top:0}}
 .drcta .btn{font-size:.92rem;padding-left:16px;padding-right:16px}
+/* full services mega menu */
+.hdr .bar{position:relative}
+.nav>li.has-mega{position:static}
+.nav .dd.mega{left:50%;top:78px;width:min(1120px,calc(100vw - 48px));min-width:0;grid-template-columns:repeat(4,1fr);gap:0 28px;padding:30px 32px;transform:translate(-50%,8px)}
+.nav li:hover>.dd.mega,.nav li:focus-within>.dd.mega,.nav li.open>.dd.mega{transform:translate(-50%,0)}
+.nav .dd::before{content:"";position:absolute;left:0;right:0;top:-22px;height:22px}
+.dd.mega .mc{display:flex;flex-direction:column;gap:22px;min-width:0}
+.dd.mega .mg{display:flex;flex-direction:column}
+.dd.mega .mg a{padding:5px 0;border-radius:0;font-size:.9rem;font-weight:500;white-space:normal;color:rgba(244,241,234,.74)}
+.dd.mega .mg a:hover{background:none;color:var(--cream)}
+.dd.mega .mg a.mh{font:700 .78rem/1.2 var(--b);letter-spacing:.12em;text-transform:uppercase;color:var(--green-2);padding:0 0 10px;margin-bottom:4px;border-bottom:1px solid var(--line-d)}
+.dd.mega .mx{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.dd.mega .mx a{background:rgba(255,255,255,.05);border-radius:14px;padding:12px 14px;font-size:.86rem;color:rgba(244,241,234,.74)}
+.dd.mega .mx a:hover{background:rgba(255,255,255,.1)}
+.drawer details.sub{border:0}
+.drawer details.sub summary{font:700 1.1rem/1.2 var(--b);padding:10px 0;color:var(--cream)}
+.drawer details.sub div{padding:0 0 10px 14px}
