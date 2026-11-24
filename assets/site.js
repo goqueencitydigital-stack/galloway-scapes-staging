@@ -39,6 +39,15 @@
   if (hdr && !hdr.classList.contains('always')) {
     const f = () => hdr.classList.toggle('solid', w.scrollY > 40); f(); w.addEventListener('scroll', f, { passive: true });
   }
+  if (hdr) {
+    let last = w.scrollY;
+    w.addEventListener('scroll', () => {
+      const y = w.scrollY, busy = hdr.querySelector('.nav li.open, .nav li:hover') || d.body.classList.contains('menu-open');
+      if (y < 120 || y < last - 6 || busy) hdr.classList.remove('hide');
+      else if (y > last + 6 && y > w.innerHeight * .5) hdr.classList.add('hide');
+      if (Math.abs(y - last) > 6) last = y;
+    }, { passive: true });
+  }
   $$('.nav > li > button').forEach(b => b.addEventListener('click', () => {
     const li = b.parentElement, open = !li.classList.contains('open');
     $$('.nav > li.open').forEach(x => { x.classList.remove('open'); $('button', x).setAttribute('aria-expanded', 'false'); });
@@ -173,7 +182,7 @@
 
   // ---------- hero film: poster first, muted loop, pause control, no autoplay on reduced motion or data saver ----------
   const saveData = (navigator.connection && navigator.connection.saveData) || false;
-  $$('.film-hero').forEach(h => {
+  $$('.film-hero,.hx-hero').forEach(h => {
     const pbs = $$('.vpause', h);
     const pick = () => w.matchMedia('(max-width:900px)').matches ? $('.bg .hvid', h) : $('.hfilm .hvid', h);
     let v = null, paused = reduce || saveData;
@@ -192,6 +201,8 @@
     d.addEventListener('visibilitychange', () => { if (!v) return; d.hidden ? v.pause() : (!paused && v.play().catch(() => {})); });
   });
 
+  // ---------- review track ----------
+  $$('[data-rtrack]').forEach(b => b.addEventListener('click', () => { const r = b.closest('section').querySelector('.hx-rtrack'); r.scrollBy({ left: +b.dataset.rtrack * r.clientWidth * .7, behavior: reduce ? 'auto' : 'smooth' }); }));
   // ---------- photo rail ----------
   $$('[data-rail]').forEach(b => b.addEventListener('click', () => { const r = b.closest('section').querySelector('.rail'); r.scrollBy({ left: +b.dataset.rail * r.clientWidth * .8, behavior: reduce ? 'auto' : 'smooth' }); }));
 
