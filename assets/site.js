@@ -238,3 +238,4 @@
     const fm = $('#est-form'); if (fm) { fm.addEventListener('focusin', () => { vis.add(fm); upd(); }); fm.addEventListener('focusout', () => setTimeout(() => { if (!fm.contains(d.activeElement)) { vis.delete(fm); upd(); } }, 50)); }
   }
 })();
+;(function(){var s=document.querySelector('.hc-strip');if(!s)return;var b=s.querySelector('.hc-pause');b&&b.addEventListener('click',function(){var p=s.classList.toggle('paused');b.setAttribute('aria-pressed',p);b.setAttribute('aria-label',p?'Play moving photos':'Pause moving photos');});})();
